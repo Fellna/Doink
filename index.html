@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Seite</title>
+    <title>Doinis 30er</title>
     <style>
         body {
             margin: 0;
@@ -40,6 +40,8 @@
             align-items: center;
             gap: 20px;
             padding-top: 60px; /* Platz für den Header */
+            position: relative;
+            overflow: hidden;
         }
 
         .image-container img {
@@ -47,6 +49,7 @@
             max-width: 90%; /* Maximal 90% der Bildschirmbreite */
             transition: transform 0.2s ease-in-out;
             pointer-events: none; /* Verhindert, dass der Benutzer das Bild auswählt oder anderweitig interagiert */
+            position: absolute; /* Positioniert das Bild innerhalb des Containers */
         }
 
         /* Responsiveness für Smartphone */
@@ -79,17 +82,34 @@
             }
         });
 
-        // Zoom-Funktion (nur Hineinzoomen, kein Herauszoomen)
+        // Zoom-Funktion (nur Hineinzoomen, kein Herauszoomen, zur Maus positioniert)
         let scale = 1;
         const imageContainer = document.getElementById('imageContainer');
+        const images = imageContainer.getElementsByTagName('img');
 
         // Zoom mit Mausrad (PC)
         imageContainer.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+
+                // Berechne die relative Position der Maus innerhalb des Bildes
+                const rect = imageContainer.getBoundingClientRect();
+                const offsetX = mouseX - rect.left;
+                const offsetY = mouseY - rect.top;
+
                 scale += e.deltaY * -0.001; // kleinere Zoom-Stufen
                 scale = Math.max(1, scale); // Zoom nur hinein (nicht hinaus)
-                imageContainer.style.transform = `scale(${scale})`;
+
+                // Berechne den Transformationsursprung (zur Maus hin)
+                const transformOrigin = `${(offsetX / imageContainer.clientWidth) * 100}% ${(offsetY / imageContainer.clientHeight) * 100}%`;
+
+                // Wende den Zoom mit dem Ursprung an
+                for (let img of images) {
+                    img.style.transformOrigin = transformOrigin;
+                    img.style.transform = `scale(${scale})`;
+                }
             }
         });
 
@@ -101,7 +121,19 @@
                 if (pinchStart) {
                     scale *= dist / pinchStart;
                     scale = Math.max(1, scale); // Zoom nur hinein (nicht hinaus)
-                    imageContainer.style.transform = `scale(${scale})`;
+
+                    // Berechne die relative Position der Pinch-Gesten innerhalb des Bildes
+                    const rect = imageContainer.getBoundingClientRect();
+                    const offsetX = (e.touches[0].pageX + e.touches[1].pageX) / 2 - rect.left;
+                    const offsetY = (e.touches[0].pageY + e.touches[1].pageY) / 2 - rect.top;
+
+                    const transformOrigin = `${(offsetX / imageContainer.clientWidth) * 100}% ${(offsetY / imageContainer.clientHeight) * 100}%`;
+
+                    // Wende den Zoom mit dem Ursprung an
+                    for (let img of images) {
+                        img.style.transformOrigin = transformOrigin;
+                        img.style.transform = `scale(${scale})`;
+                    }
                 }
                 pinchStart = dist;
             }
