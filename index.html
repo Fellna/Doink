@@ -41,8 +41,8 @@
         }
 
         .image-container img {
-            width: 100%;
-            max-width: 100%;
+            width: 90%; /* Bilder sind nun 10% kleiner als die Bildschirmbreite */
+            max-width: 90%; /* Maximal 90% der Bildschirmbreite */
             transition: transform 0.2s ease-in-out;
         }
 
@@ -84,8 +84,8 @@
         imageContainer.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
-                scale += e.deltaY * -0.01;
-                scale = Math.min(Math.max(1, scale), 2); // Begrenzung auf 1x bis 2x
+                scale += e.deltaY * -0.001; // kleinere Zoom-Stufen
+                scale = Math.min(Math.max(0.5, scale), 1); // Begrenzung auf 0.5x bis 1x (90% der Bildschirmbreite)
                 imageContainer.style.transform = `scale(${scale})`;
             }
         });
@@ -97,7 +97,7 @@
                 const dist = getDistance(e.touches[0], e.touches[1]);
                 if (pinchStart) {
                     scale *= dist / pinchStart;
-                    scale = Math.min(Math.max(1, scale), 2); // Begrenzung auf 1x bis 2x
+                    scale = Math.min(Math.max(0.5, scale), 1); // Begrenzung auf 0.5x bis 1x (90% der Bildschirmbreite)
                     imageContainer.style.transform = `scale(${scale})`;
                 }
                 pinchStart = dist;
