@@ -11,16 +11,19 @@
       background-color: #000;
       font-family: sans-serif;
       color: white;
+      overflow: hidden;
     }
 
-    header {
-      background-color: #111;
+    h1 {
       padding: 20px;
+      margin: 0;
+      background-color: #111;
       text-align: center;
     }
 
     #zoom-wrapper {
       width: 100%;
+      height: calc(100vh - 72px);
       overflow: auto;
       touch-action: pinch-zoom;
     }
@@ -28,7 +31,6 @@
     #zoom-container {
       transform-origin: 0 0;
       transition: transform 0.1s ease-out;
-      padding: 10px;
     }
 
     .slide {
@@ -41,16 +43,14 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Doinkiii's 30er 🎉</h1>
-  </header>
+  <h1>Doinkiii's 30er 🎉</h1>
 
   <div id="zoom-wrapper">
     <div id="zoom-container">
       <img src="slide1.jpg" alt="Folie 1" class="slide">
       <img src="slide2.jpg" alt="Folie 2" class="slide">
       <img src="slide3.jpg" alt="Folie 3" class="slide">
-      <!-- Weitere Bilder hier -->
+      <!-- Weitere Bilder hier einfügen -->
     </div>
   </div>
 
