@@ -10,6 +10,8 @@
             padding: 0;
             font-family: Arial, sans-serif;
             overflow-x: hidden;
+            background-color: black; /* Schwarzer Hintergrund */
+            color: white;
         }
 
         /* Fixiere die Überschrift, sodass sie beim Scrollen verschwindet */
@@ -44,6 +46,7 @@
             width: 90%; /* Bilder sind nun 10% kleiner als die Bildschirmbreite */
             max-width: 90%; /* Maximal 90% der Bildschirmbreite */
             transition: transform 0.2s ease-in-out;
+            pointer-events: none; /* Verhindert, dass der Benutzer das Bild auswählt oder anderweitig interagiert */
         }
 
         /* Responsiveness für Smartphone */
@@ -61,9 +64,9 @@
 
     <!-- Container für die Bilder -->
     <div class="image-container" id="imageContainer">
-        <img src=slide1.jpg alt="Bild 1">
-        <img src=slide2.jpg alt="Bild 2">
-        <img src=slide3.jpg alt="Bild 3">
+        <img src="slide1.jpg" alt="Bild 1">
+        <img src="slide2.jpg" alt="Bild 2">
+        <img src="slide3.jpg" alt="Bild 3">
     </div>
 
     <script>
@@ -76,7 +79,7 @@
             }
         });
 
-        // Zoom-Funktion (PC + Smartphone)
+        // Zoom-Funktion (nur Hineinzoomen, kein Herauszoomen)
         let scale = 1;
         const imageContainer = document.getElementById('imageContainer');
 
@@ -85,7 +88,7 @@
             if (e.ctrlKey) {
                 e.preventDefault();
                 scale += e.deltaY * -0.001; // kleinere Zoom-Stufen
-                scale = Math.min(Math.max(0.5, scale), 1); // Begrenzung auf 0.5x bis 1x (90% der Bildschirmbreite)
+                scale = Math.max(1, scale); // Zoom nur hinein (nicht hinaus)
                 imageContainer.style.transform = `scale(${scale})`;
             }
         });
@@ -97,7 +100,7 @@
                 const dist = getDistance(e.touches[0], e.touches[1]);
                 if (pinchStart) {
                     scale *= dist / pinchStart;
-                    scale = Math.min(Math.max(0.5, scale), 1); // Begrenzung auf 0.5x bis 1x (90% der Bildschirmbreite)
+                    scale = Math.max(1, scale); // Zoom nur hinein (nicht hinaus)
                     imageContainer.style.transform = `scale(${scale})`;
                 }
                 pinchStart = dist;
