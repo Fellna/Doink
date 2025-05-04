@@ -148,9 +148,20 @@
     });
 
     // Header scroll hide
-    zoomContainer.addEventListener('scroll', function () {
-      header.style.top = zoomContainer.scrollTop > 50 ? '-60px' : '0';
-    });
+    let lastScrollTop = 0;
+zoomContainer.addEventListener('scroll', function () {
+  const scrollTop = zoomContainer.scrollTop;
+
+  if (scrollTop > lastScrollTop) {
+    // Scrollt nach unten
+    header.style.top = '-60px';
+  } else {
+    // Scrollt nach oben
+    header.style.top = '0';
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Verhindert negative Werte
+});
 
     // Passwortprüfung
     passwordInput.addEventListener('keypress', function (e) {
