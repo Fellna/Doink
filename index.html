@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Doinkiii's 30er 🎉</title>
   <style>
     body {
@@ -11,44 +11,55 @@
       background-color: #000;
       font-family: sans-serif;
       color: white;
-      text-align: center;
+      overflow: hidden;
     }
 
     h1 {
       padding: 20px;
       margin: 0;
       background-color: #111;
+      text-align: center;
     }
 
-    .slide-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 10px;
+    #zoom-wrapper {
+      width: 100%;
+      height: calc(100vh - 72px);
+      overflow: auto;
+      touch-action: pinch-zoom;
     }
 
-    .slide-container img {
+    #zoom-container {
+      transform-origin: 0 0;
+      transition: transform 0.1s ease-out;
+    }
+
+    .slide {
       max-width: 100%;
       height: auto;
+      display: block;
+      margin: 10px auto;
       border-radius: 10px;
-      touch-action: manipulation;
-    }
-
-    @media (hover: hover) {
-      .slide-container img:hover {
-        cursor: zoom-in;
-      }
     }
   </style>
 </head>
 <body>
   <h1>Doinkiii's 30er 🎉</h1>
 
-  <div class="slide-container">
-    <img src="slide1.jpg" alt="Folie 1">
-    <img src="slide2.jpg" alt="Folie 2">
-    <img src="slide3.jpg" alt="Folie 3">
-    <!-- Weitere Slides hier -->
+  <div id="zoom-wrapper">
+    <div id="zoom-container">
+      <img src="slide1.jpg" alt="Folie 1" class="slide">
+      <img src="slide2.jpg" alt="Folie 2" class="slide">
+      <img src="slide3.jpg" alt="Folie 3" class="slide">
+      <!-- Weitere Bilder hier einfügen -->
+    </div>
   </div>
-</body>
-</html>
+
+  <script>
+    let scale = 1;
+    const zoomStep = 0.1;
+    const container = document.getElementById("zoom-container");
+
+    window.addEventListener("wheel", function (e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
