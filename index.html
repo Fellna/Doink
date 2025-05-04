@@ -28,22 +28,36 @@
       transition: top 0.3s;
     }
 
-    .top-right {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      z-index: 11;
+    .scrolled header {
+      top: -60px;
     }
 
-    #passwordInput, #backButton {
+    .top-right-inside {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #passwordInput {
+      background-color: black;
+      color: white;
+      border: 1px solid white;
       padding: 5px 10px;
-      font-size: 14px;
       border-radius: 5px;
-      border: none;
+      font-size: 14px;
     }
 
     #backButton {
       display: none;
+      background: #555;
+      color: white;
+      border: 1px solid white;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 14px;
       cursor: pointer;
     }
 
@@ -72,20 +86,19 @@
 </head>
 <body>
 
-  <header id="header">Welcome to Doinkis 30er <3</header>
-
-  <!-- Passwortfeld & Zurück-Button -->
-  <div class="top-right">
-    <input type="password" id="passwordInput" placeholder="Passwort eingeben" />
-    <button id="backButton">Zurück</button>
-  </div>
+  <header id="header">
+    Welcome to Doinkis 30er <3
+    <div class="top-right-inside">
+      <input type="password" id="passwordInput" placeholder="Passwort" />
+      <button id="backButton">Zurück</button>
+    </div>
+  </header>
 
   <div id="zoomContainer">
     <div id="zoomContent">
       <img src="slide1.jpg" class="image" alt="Bild 1" />
       <img src="slide2.jpg" class="image" alt="Bild 2" />
       <img src="slide3.jpg" class="image" alt="Bild 3" />
-      <!-- Zusätzliche Bilder (versteckt bis Passwort richtig ist) -->
       <img src="slide4.jpg" class="image extra" alt="Bild 4" />
       <img src="slide5.jpg" class="image extra" alt="Bild 5" />
     </div>
@@ -101,11 +114,9 @@
 
     let scale = 1;
 
-    // Zoom zur Mausposition
     zoomContainer.addEventListener('wheel', function (e) {
       if (e.ctrlKey) {
         e.preventDefault();
-
         const delta = e.deltaY * -0.001;
         if (delta < 0 && scale <= 1) return;
 
@@ -138,11 +149,7 @@
 
     // Header scroll hide
     zoomContainer.addEventListener('scroll', function () {
-      if (zoomContainer.scrollTop > 50) {
-        header.style.top = '-60px';
-      } else {
-        header.style.top = '0';
-      }
+      header.style.top = zoomContainer.scrollTop > 50 ? '-60px' : '0';
     });
 
     // Passwortprüfung
