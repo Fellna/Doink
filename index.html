@@ -28,8 +28,23 @@
       transition: top 0.3s;
     }
 
-    .scrolled header {
-      top: -60px;
+    .top-right {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 11;
+    }
+
+    #passwordInput, #backButton {
+      padding: 5px 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    #backButton {
+      display: none;
+      cursor: pointer;
     }
 
     #zoomContainer {
@@ -49,40 +64,50 @@
       margin: 100px auto;
       display: block;
     }
+
+    .extra {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <header id="header">Welcome to Doinkis 30er <3</header>
 
+  <!-- Passwortfeld & Zurück-Button -->
+  <div class="top-right">
+    <input type="password" id="passwordInput" placeholder="Passwort eingeben" />
+    <button id="backButton">Zurück</button>
+  </div>
+
   <div id="zoomContainer">
     <div id="zoomContent">
       <img src="slide1.jpg" class="image" alt="Bild 1" />
       <img src="slide2.jpg" class="image" alt="Bild 2" />
       <img src="slide3.jpg" class="image" alt="Bild 3" />
+      <!-- Zusätzliche Bilder (versteckt bis Passwort richtig ist) -->
+      <img src="slide4.jpg" class="image extra" alt="Bild 4" />
+      <img src="slide5.jpg" class="image extra" alt="Bild 5" />
     </div>
   </div>
 
   <script>
-    // Header verschwindet beim Scrollen
-  window.addEventListener('scroll', function () {
-  document.body.classList.toggle('scrolled', window.scrollY > 50);
-  });
-
-
-
     const zoomContainer = document.getElementById('zoomContainer');
     const zoomContent = document.getElementById('zoomContent');
+    const passwordInput = document.getElementById('passwordInput');
+    const backButton = document.getElementById('backButton');
+    const extraImages = document.querySelectorAll('.extra');
+    const header = document.getElementById('header');
 
     let scale = 1;
 
+    // Zoom zur Mausposition
     zoomContainer.addEventListener('wheel', function (e) {
       if (e.ctrlKey) {
         e.preventDefault();
 
-        // Nur Vergrößern
         const delta = e.deltaY * -0.001;
-        if (delta < 0 && scale <= 1) return; // Nicht unter 1x skalieren
+        if (delta < 0 && scale <= 1) return;
 
         const rect = zoomContainer.getBoundingClientRect();
         const offsetX = e.clientX - rect.left + zoomContainer.scrollLeft;
@@ -90,7 +115,7 @@
 
         const prevScale = scale;
         scale += delta;
-        scale = Math.max(1, Math.min(5, scale)); // min 1x, max 5x
+        scale = Math.max(1, Math.min(5, scale));
 
         const scaleChange = scale / prevScale;
 
@@ -109,6 +134,37 @@
         zoomContent.style.transform = `scale(1)`;
         zoomContainer.scrollTo(0, 0);
       }
+    });
+
+    // Header scroll hide
+    zoomContainer.addEventListener('scroll', function () {
+      if (zoomContainer.scrollTop > 50) {
+        header.style.top = '-60px';
+      } else {
+        header.style.top = '0';
+      }
+    });
+
+    // Passwortprüfung
+    passwordInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        if (passwordInput.value === 'Test123') {
+          extraImages.forEach(img => img.style.display = 'block');
+          passwordInput.style.display = 'none';
+          backButton.style.display = 'inline-block';
+        } else {
+          alert('Falsches Passwort');
+        }
+      }
+    });
+
+    // Zurücksetzen
+    backButton.addEventListener('click', function () {
+      extraImages.forEach(img => img.style.display = 'none');
+      passwordInput.style.display = 'inline-block';
+      passwordInput.value = '';
+      backButton.style.display = 'none';
+      zoomContainer.scrollTo(0, 0);
     });
   </script>
 </body>
