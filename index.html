@@ -78,9 +78,9 @@
       if (e.ctrlKey) {
         e.preventDefault();
 
-        // Nur Hineinzoomen
+        // Nur Vergrößern
         const delta = e.deltaY * -0.001;
-        if (delta <= 0) return;
+        if (delta < 0 && scale <= 1) return; // Nicht unter 1x skalieren
 
         const rect = zoomContainer.getBoundingClientRect();
         const offsetX = e.clientX - rect.left + zoomContainer.scrollLeft;
@@ -88,15 +88,24 @@
 
         const prevScale = scale;
         scale += delta;
-        scale = Math.min(Math.max(1, scale), 5);
+        scale = Math.max(1, Math.min(5, scale)); // min 1x, max 5x
 
         const scaleChange = scale / prevScale;
 
-        // Zoom zur Mausposition:
         zoomContainer.scrollLeft = (offsetX * scaleChange) - (e.clientX - rect.left);
         zoomContainer.scrollTop = (offsetY * scaleChange) - (e.clientY - rect.top);
 
         zoomContent.style.transform = `scale(${scale})`;
+      }
+    });
+
+    // Zoom zurücksetzen mit STRG + 0
+    window.addEventListener('keydown', function (e) {
+      if (e.ctrlKey && e.key === '0') {
+        e.preventDefault();
+        scale = 1;
+        zoomContent.style.transform = `scale(1)`;
+        zoomContainer.scrollTo(0, 0);
       }
     });
   </script>
