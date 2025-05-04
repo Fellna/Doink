@@ -64,10 +64,16 @@
   </div>
 
   <script>
-    // Header verschwindet beim Scrollen
-    window.addEventListener('scroll', function () {
-      document.body.classList.toggle('scrolled', window.scrollY > 50);
+    // Header verschwindet beim Scrollen des zoomContainers
+    const header = document.getElementById('header');
+    zoomContainer.addEventListener('scroll', function () {
+      if (zoomContainer.scrollTop > 50) {
+        header.style.top = '-60px';
+      } else {
+        header.style.top = '0';
+      }
     });
+
 
     const zoomContainer = document.getElementById('zoomContainer');
     const zoomContent = document.getElementById('zoomContent');
