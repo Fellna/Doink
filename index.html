@@ -2,16 +2,17 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GitHub Seite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Zoom zur Maus</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      overflow-x: hidden;
-      background-color: black;
+      background: black;
       color: white;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
     }
 
     header {
@@ -31,112 +32,73 @@
       top: -60px;
     }
 
-    .image-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding-top: 80px;
-    }
-
-    .zoom-wrapper {
-      width: 90%;
-      max-width: 90%;
-      overflow: hidden;
+    #zoomContainer {
+      width: 100%;
+      height: 100%;
+      overflow: scroll;
       position: relative;
     }
 
-    .zoom-wrapper img {
-      width: 100%;
-      transition: transform 0.2s ease-in-out;
-      display: block;
-      pointer-events: none;
+    #zoomContent {
+      transform-origin: 0 0;
+      transition: transform 0.05s linear;
     }
 
-    @media (max-width: 768px) {
-      .image-container {
-        gap: 15px;
-      }
+    .image {
+      width: 90vw;
+      margin: 100px auto;
+      display: block;
     }
   </style>
 </head>
 <body>
+
   <header id="header">Welcome to Doinkis 30er <3</header>
 
-  <div class="image-container" id="imageContainer">
-    <div class="zoom-wrapper"><img src="slide1.jpg" alt="Bild 1" /></div>
-    <div class="zoom-wrapper"><img src="slide2.jpg" alt="Bild 2" /></div>
-    <div class="zoom-wrapper"><img src="slide3.jpg" alt="Bild 3" /></div>
+  <div id="zoomContainer">
+    <div id="zoomContent">
+      <img src="slide1.jpg" class="image" alt="Bild 1" />
+      <img src="slide2.jpg" class="image" alt="Bild 2" />
+      <img src="slide3.jpg" class="image" alt="Bild 3" />
+    </div>
   </div>
 
   <script>
-    window.addEventListener("scroll", function () {
-      document.body.classList.toggle("scrolled", window.scrollY > 50);
+    // Header verschwindet beim Scrollen
+    window.addEventListener('scroll', function () {
+      document.body.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    const zoomWrappers = document.querySelectorAll(".zoom-wrapper");
-    const imageContainer = document.getElementById("imageContainer");
+    const zoomContainer = document.getElementById('zoomContainer');
+    const zoomContent = document.getElementById('zoomContent');
 
-    // PC: Zoom zur Maus
-    zoomWrappers.forEach(wrapper => {
-      let scale = 1;
-      wrapper.addEventListener("wheel", (e) => {
-        if (e.ctrlKey) {
-          e.preventDefault();
-          const img = wrapper.querySelector("img");
-          const rect = wrapper.getBoundingClientRect();
-          const offsetX = e.clientX - rect.left;
-          const offsetY = e.clientY - rect.top;
-
-          scale += e.deltaY * -0.001;
-          scale = Math.max(1, scale);
-
-          const originX = (offsetX / wrapper.clientWidth) * 100;
-          const originY = (offsetY / wrapper.clientHeight) * 100;
-
-          img.style.transformOrigin = `${originX}% ${originY}%`;
-          img.style.transform = `scale(${scale})`;
-        }
-      });
-    });
-
-    // Mobile: Zoom zur Pinch-Mitte
     let scale = 1;
-    let pinchStart = null;
-    imageContainer.addEventListener("touchmove", (e) => {
-      if (e.touches.length === 2) {
-        const dist = getDistance(e.touches[0], e.touches[1]);
-        if (pinchStart) {
-          scale *= dist / pinchStart;
-          scale = Math.max(1, scale);
 
-          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-          const element = document.elementFromPoint(midX, midY);
-          const wrapper = element?.closest(".zoom-wrapper");
-          const img = wrapper?.querySelector("img");
-          if (img && wrapper) {
-            const rect = wrapper.getBoundingClientRect();
-            const originX = ((midX - rect.left) / wrapper.clientWidth) * 100;
-            const originY = ((midY - rect.top) / wrapper.clientHeight) * 100;
+    zoomContainer.addEventListener('wheel', function (e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
 
-            img.style.transformOrigin = `${originX}% ${originY}%`;
-            img.style.transform = `scale(${scale})`;
-          }
-        }
-        pinchStart = dist;
+        // Nur Hineinzoomen
+        const delta = e.deltaY * -0.001;
+        if (delta <= 0) return;
+
+        const rect = zoomContainer.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left + zoomContainer.scrollLeft;
+        const offsetY = e.clientY - rect.top + zoomContainer.scrollTop;
+
+        const prevScale = scale;
+        scale += delta;
+        scale = Math.min(Math.max(1, scale), 5);
+
+        const scaleChange = scale / prevScale;
+
+        // Zoom zur Mausposition:
+        zoomContainer.scrollLeft = (offsetX * scaleChange) - (e.clientX - rect.left);
+        zoomContainer.scrollTop = (offsetY * scaleChange) - (e.clientY - rect.top);
+
+        zoomContent.style.transform = `scale(${scale})`;
       }
     });
-
-    imageContainer.addEventListener("touchend", () => {
-      pinchStart = null;
-    });
-
-    function getDistance(t1, t2) {
-      const dx = t1.clientX - t2.clientX;
-      const dy = t1.clientY - t2.clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
   </script>
 </body>
 </html>
