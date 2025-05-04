@@ -11,14 +11,15 @@
       background-color: #000;
       font-family: sans-serif;
       color: white;
-      overflow: hidden;
     }
 
-    h1 {
-      padding: 20px;
-      margin: 0;
+    header {
+      position: sticky;
+      top: 0;
       background-color: #111;
+      padding: 20px;
       text-align: center;
+      z-index: 1000;
     }
 
     #zoom-wrapper {
@@ -31,6 +32,7 @@
     #zoom-container {
       transform-origin: 0 0;
       transition: transform 0.1s ease-out;
+      padding: 10px;
     }
 
     .slide {
@@ -43,14 +45,16 @@
   </style>
 </head>
 <body>
-  <h1>Doinkiii's 30er 🎉</h1>
+  <header>
+    <h1>Doinkiii's 30er 🎉</h1>
+  </header>
 
   <div id="zoom-wrapper">
     <div id="zoom-container">
       <img src="slide1.jpg" alt="Folie 1" class="slide">
       <img src="slide2.jpg" alt="Folie 2" class="slide">
       <img src="slide3.jpg" alt="Folie 3" class="slide">
-      <!-- Weitere Bilder hier einfügen -->
+      <!-- Weitere Bilder hier -->
     </div>
   </div>
 
@@ -63,3 +67,13 @@
       if (e.ctrlKey) {
         e.preventDefault();
         if (e.deltaY < 0) {
+          scale += zoomStep;
+        } else {
+          scale = Math.max(zoomStep, scale - zoomStep);
+        }
+        container.style.transform = `scale(${scale})`;
+      }
+    }, { passive: false });
+  </script>
+</body>
+</html>
