@@ -3,37 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Doinkiii's 30er – Präsentation 🎉</title>
+  <title>Doinkiii's 30er</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      overflow: hidden;
       background-color: #000;
-      color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      background-color: #111;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-    .pdf-container {
-      height: calc(100% - 72px);
     }
     iframe {
-      width: 100%;
-      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       border: none;
     }
   </style>
 </head>
 <body>
-  <h1>Doinkiii's 30er – Präsentation 🎉</h1>
-  <div class="pdf-container">
-    <iframe src="presentation.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
-  </div>
+  <iframe src="presentation.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit"></iframe>
 </body>
 </html>
-
