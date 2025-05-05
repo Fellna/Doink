@@ -150,11 +150,20 @@ zoomContainer.addEventListener('scroll', function () {
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Verhindert negative Werte
 });
 
-    // Passwortprüfung mit Weiterleitung
-passwordInput.addEventListener('keypress', function (e) {
+    // Passwortprüfung mit SHA-256 Hash
+passwordInput.addEventListener('keypress', async function (e) {
   if (e.key === 'Enter') {
-    if (passwordInput.value === 'Test123') {
-      window.location.href = 'secret.html'; // Weiterleitung zur geheimen Seite
+    const password = passwordInput.value;
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    const correctHash = '2b9d29e13dd4dc9e4f12f502401bdf3b52cf7724bbdc792d5f86b10e72a0e18f'; // Hash von "Do1nk1-1995-Fox"
+
+    if (hashHex === correctHash) {
+      window.location.href = 'secret.html';
     } else {
       alert('Falsches Passwort');
     }
