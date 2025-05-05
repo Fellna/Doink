@@ -160,7 +160,7 @@ passwordInput.addEventListener('keypress', async function (e) {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    const correctHash = '2b9d29e13dd4dc9e4f12f502401bdf3b52cf7724bbdc792d5f86b10e72a0e18f'; // Hash von "Do1nk1-1995-Fox"
+    const correctHash = 'd3d8bfc4e7d7aa6247a1e3dc1fa94ac94d8c5a2d9967c5e7c7a58594a9c41b56'; // Hash von "Do1nk1-1995"
 
     if (hashHex === correctHash) {
       window.location.href = 'secret.html';
