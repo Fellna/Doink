@@ -150,18 +150,16 @@ zoomContainer.addEventListener('scroll', function () {
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Verhindert negative Werte
 });
 
-    // Passwortprüfung
-    passwordInput.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        if (passwordInput.value === 'Test123') {
-          extraImages.forEach(img => img.style.display = 'block');
-          passwordInput.style.display = 'none';
-          backButton.style.display = 'inline-block';
-        } else {
-          alert('Falsches Passwort');
-        }
-      }
-    });
+    // Passwortprüfung mit Weiterleitung
+passwordInput.addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    if (passwordInput.value === 'Test123') {
+      window.location.href = 'secret.html'; // Weiterleitung zur geheimen Seite
+    } else {
+      alert('Falsches Passwort');
+    }
+  }
+});
   </script>
 </body>
 </html>
