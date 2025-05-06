@@ -161,10 +161,11 @@
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
+       
 
       countdownText.innerHTML =
       `🎉 Doinki wird 30 in 🎉 
-       <span>${days} Tage</span> : 
+       <span>${days} ${days === 1 ? 'Tag' : 'Tagen'}</span> :  
        <span>${hours} Std</span> : 
        <span>${minutes} Min</span> : 
        <span>${seconds} Sek</span> 🎉`;
