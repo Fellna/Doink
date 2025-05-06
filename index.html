@@ -144,7 +144,7 @@
     const countdownText = document.getElementById('countdownText');
 
     // Zielzeit: 6. Mai 2025, 22:00
-    const targetDate = new Date("2025-05-06T21:00:00");
+    const targetDate = new Date("2025-05-15T00:00:00");
 
     function updateCountdown() {
       const now = new Date();
@@ -163,7 +163,7 @@
       const seconds = Math.floor((diff / 1000) % 60);
 
       countdownText.innerHTML =
-      `🎉 Doinki wird 30 in 🎉 – 
+      `🎉 Doinki wird 30 in 🎉 
        <span>${days} Tage</span> : 
        <span>${hours} Std</span> : 
        <span>${minutes} Min</span> : 
