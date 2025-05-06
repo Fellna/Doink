@@ -80,21 +80,39 @@
       }
     }
 
-    .extra {
-      display: none;
+    #countdownOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      z-index: 9999;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
 
-  <header id="header">
+  <div id="countdownOverlay">
+    <div id="countdownText">Countdown läuft...</div>
+  </div>
+
+  <header id="header" style="display: none;">
     🎉 Doinki´s 30er 🎉
     <div class="top-right-inside">
       <input type="password" id="passwordInput" placeholder="" />
     </div>
   </header>
 
-  <div id="zoomContainer">
+  <div id="zoomContainer" style="display: none;">
     <div id="zoomContent">
       <img src="slide1.jpg" class="image" alt="Bild 1" />
       <img src="slide2.jpg" class="image" alt="Bild 2" />
@@ -107,7 +125,37 @@
     const zoomContent = document.getElementById('zoomContent');
     const passwordInput = document.getElementById('passwordInput');
     const header = document.getElementById('header');
+    const countdownOverlay = document.getElementById('countdownOverlay');
+    const countdownText = document.getElementById('countdownText');
 
+    // Zielzeit: 6. Mai 2025, 22:00
+    const targetDate = new Date("2025-05-06T20:40:00");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        countdownOverlay.style.display = 'none';
+        header.style.display = 'block';
+        zoomContainer.style.display = 'block';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      countdownText.textContent =
+        `Die Party beginnt in ${days} Tag(en), ${hours} Stunde(n), ${minutes} Minute(n), ${seconds} Sekunde(n)`;
+
+      requestAnimationFrame(updateCountdown);
+    }
+
+    updateCountdown();
+
+    // Zoom und Scroll-Logik
     let scale = 1;
 
     zoomContainer.addEventListener('wheel', function (e) {
@@ -171,7 +219,7 @@
           window.location.href = 'secret.html';
         } else {
           alert('Falsches Passwort');
-          passwordInput.value = ''; // Falsches Passwort → Eingabe löschen
+          passwordInput.value = '';
         }
       }
     });
