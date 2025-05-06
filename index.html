@@ -28,10 +28,6 @@
       transition: top 0.3s;
     }
 
-    .scrolled header {
-      top: -60px;
-    }
-
     .top-right-inside {
       position: absolute;
       top: 5px;
@@ -63,26 +59,26 @@
       transition: transform 0.05s linear;
     }
 
-   .image {
-  width: 95vw;
-  max-height: 95vh;
-  height: auto;
-  margin: 100px auto;
-  display: block;
-  object-fit: contain;
-}
+    .image {
+      width: 95vw;
+      max-height: 95vh;
+      height: auto;
+      margin: 100px auto;
+      display: block;
+      object-fit: contain;
+    }
 
-@media (min-width: 768px) {
-  .image {
-    width: 80vw;
-  }
-}
+    @media (min-width: 768px) {
+      .image {
+        width: 80vw;
+      }
+    }
 
-@media (min-width: 1200px) {
-  .image {
-    width: 60vw;
-  }
-}
+    @media (min-width: 1200px) {
+      .image {
+        width: 60vw;
+      }
+    }
 
     .extra {
       display: none;
@@ -109,7 +105,7 @@
   <script>
     const zoomContainer = document.getElementById('zoomContainer');
     const zoomContent = document.getElementById('zoomContent');
-    const passwordInput = document.getElementById('passwordInput');    
+    const passwordInput = document.getElementById('passwordInput');
     const header = document.getElementById('header');
 
     let scale = 1;
@@ -137,7 +133,6 @@
       }
     });
 
-    // Zoom zurücksetzen mit STRG + 0
     window.addEventListener('keydown', function (e) {
       if (e.ctrlKey && e.key === '0') {
         e.preventDefault();
@@ -147,43 +142,44 @@
       }
     });
 
-    // Header scroll hide
     let lastScrollTop = 0;
-  zoomContainer.addEventListener('scroll', function () {
-  const scrollTop = zoomContainer.scrollTop;
+    zoomContainer.addEventListener('scroll', function () {
+      const scrollTop = zoomContainer.scrollTop;
 
-  if (scrollTop > lastScrollTop) {
-    // Scrollt nach unten
-    header.style.top = '-60px';
-  } else {
-    // Scrollt nach oben
-    header.style.top = '0';
-  }
+      if (scrollTop > lastScrollTop) {
+        header.style.top = '-60px';
+      } else {
+        header.style.top = '0';
+      }
 
-  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Verhindert negative Werte
-});
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
 
-// Passwortprüfung mit SHA-256 Hash
-passwordInput.addEventListener('keypress', async function (e) {
-  if (e.key === 'Enter') {
-    const password = passwordInput.value;
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // Passwortprüfung
+    passwordInput.addEventListener('keypress', async function (e) {
+      if (e.key === 'Enter') {
+        const password = passwordInput.value;
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-    // Der SHA-256 Hash des Passworts "Do1nk1-3O"
-    const correctHash = '9a5f7aa20c3ee23118dd3c94c3e5053770eaeb6c057385a4feb324cdec00114d';
+        const correctHash = '9a5f7aa20c3ee23118dd3c94c3e5053770eaeb6c057385a4feb324cdec00114d';
 
-    if (hashHex === correctHash) {
-      window.location.href = 'secret.html';
-    } else {
-      alert('Falsches Passwort');
-    }
-  }
-});
-    
+        if (hashHex === correctHash) {
+          window.location.href = 'secret.html';
+        } else {
+          alert('Falsches Passwort');
+          passwordInput.value = ''; // Falsches Passwort → Eingabe löschen
+        }
+      }
+    });
+
+    // Wenn der Nutzer woanders hinklickt → Eingabe löschen
+    passwordInput.addEventListener('blur', function () {
+      passwordInput.value = '';
+    });
   </script>
 </body>
 </html>
