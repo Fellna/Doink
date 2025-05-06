@@ -63,10 +63,25 @@
       transition: transform 0.05s linear;
     }
 
-    .image {
-      width: 80vw;
-      margin: 100px auto;
-      display: block;
+   .image {
+  width: 95vw;
+  margin: 100px auto;
+  display: block;
+}
+
+/* Für größere Bildschirme (z. B. PC) */
+@media (min-width: 768px) {
+  .image {
+    width: 80vw;
+  }
+}
+
+/* Für sehr große Bildschirme */
+@media (min-width: 1200px) {
+  .image {
+    width: 60vw;
+  }
+}
     }
 
     .extra {
