@@ -65,24 +65,24 @@
 
    .image {
   width: 95vw;
+  max-height: 95vh;
+  height: auto;
   margin: 100px auto;
   display: block;
+  object-fit: contain;
 }
 
-/* Für größere Bildschirme (z. B. PC) */
 @media (min-width: 768px) {
   .image {
     width: 80vw;
   }
 }
 
-/* Für sehr große Bildschirme */
 @media (min-width: 1200px) {
   .image {
     width: 60vw;
   }
 }
-    }
 
     .extra {
       display: none;
@@ -109,9 +109,7 @@
   <script>
     const zoomContainer = document.getElementById('zoomContainer');
     const zoomContent = document.getElementById('zoomContent');
-    const passwordInput = document.getElementById('passwordInput');
-    const backButton = document.getElementById('backButton');
-    const extraImages = document.querySelectorAll('.extra');
+    const passwordInput = document.getElementById('passwordInput');    
     const header = document.getElementById('header');
 
     let scale = 1;
@@ -151,7 +149,7 @@
 
     // Header scroll hide
     let lastScrollTop = 0;
-zoomContainer.addEventListener('scroll', function () {
+  zoomContainer.addEventListener('scroll', function () {
   const scrollTop = zoomContainer.scrollTop;
 
   if (scrollTop > lastScrollTop) {
